@@ -2,7 +2,14 @@ import { BsDot } from "react-icons/bs";
 import { FiExternalLink } from "react-icons/fi";
 import { FaPlay } from "react-icons/fa6";
 
-function MainContent({ word, phonetics, meanings, sourceUrls, audio }) {
+function MainContent({
+    word,
+    phonetics,
+    meanings,
+    sourceUrls,
+    audio,
+    setAudioError,
+}) {
     return (
         <div className="mt-8 px-4">
             <div className="flex items-center justify-between">
@@ -19,7 +26,15 @@ function MainContent({ word, phonetics, meanings, sourceUrls, audio }) {
                     {audio?.src && (
                         <div
                             onClick={() => {
-                                audio.play();
+                                audio
+                                    .play()
+                                    .then(() => {
+                                        console.log("Playing audio");
+                                    })
+                                    .catch((err) => {
+                                        console.log(err);
+                                        setAudioError(true);
+                                    });
                             }}
                             className="group flex size-14 cursor-pointer items-center justify-center rounded-full bg-purple-300 shadow-lg"
                         >

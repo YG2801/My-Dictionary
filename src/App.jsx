@@ -5,6 +5,7 @@ import MainContent from "./components/MainContent";
 import { CiSearch } from "react-icons/ci";
 
 function App() {
+    const [audioError, setAudioError] = useState(false);
     const [font, setFont] = useState("Serif");
     const fontData = {
         Serif: "Serif",
@@ -55,14 +56,31 @@ function App() {
         }
     }
 
-    const mainContent = obj && <MainContent {...obj} audio={audio} />;
+    useEffect(() => {
+        if (audioError) {
+            setTimeout(() => {
+                setAudioError(false);
+            }, 3000);
+        }
+    }, [audioError]);
+
+    const mainContent = obj && (
+        <MainContent {...obj} audio={audio} setAudioError={setAudioError} />
+    );
 
     return (
         <div
             className={`min-h-screen w-full overflow-hidden text-base transition-colors md:py-2 dark:bg-zinc-950 dark:text-white ${darkMode && "dark"}`}
             style={{ fontFamily: font }}
         >
-            <main className="break-word mx-auto min-h-screen max-w-[500px] px-3 py-4">
+            <main className="break-word relative mx-auto min-h-screen max-w-[500px] px-3 py-4">
+                <div
+                    className={`absolute transition-all duration-300  ${audioError ? "right-4 top-4 opacity-100 z-10" : "right-0 top-4 opacity-0 -z-10"} rounded-md border-b-4 border-red-400 bg-blue-50 px-4 py-2`}
+                >
+                    <p className="cursor-pointer font-sans font-semibold">
+                        Audio is currently unavailable
+                    </p>
+                </div>
                 <Header setDarkMode={setDarkMode}>
                     <Menu value={font} setValue={setFont} data={fontData} />
                 </Header>
